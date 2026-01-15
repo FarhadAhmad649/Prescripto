@@ -9,24 +9,12 @@ import mongoose from "mongoose";
 // API for adding doctor
 const addDoctor = async (req, res) => {
   try {
-    const {
-      name,
-      email,
-      password,
-      speciality,
-      degree,
-      experience,
-      about,
-      fees,
-      address,
-    } = req.body;
-
+    const { name, email,password,speciality,degree,experience,about,fees,address } = req.body;
     const imageFile = req.file;
 
     // checking for all the data to add doctor
     if (
-      !name ||
-      !email ||
+      !name || !email ||
       !password ||
       !speciality ||
       !degree ||
@@ -104,6 +92,18 @@ const getDoctors = async (req, res) => {
   }
 };
 
+// API to get all doctors list for the admin panel
+const alldoctors = async (req, res)=>{
+  try {
+
+    const doctors = await doctorModel.find({}).select('-password')
+    res.json({success:true, doctors})
+    
+  } catch (error) {
+    console.log("getDoctors error:", error)
+    return res.json({ success: false, message: error.message })
+  }
+}
 
 // API for admin login
 const loginAdmin = async(req, res)=>{
@@ -124,4 +124,4 @@ const loginAdmin = async(req, res)=>{
     }
 }
 
-export { addDoctor, loginAdmin, getDoctors };
+export { addDoctor, loginAdmin, getDoctors, alldoctors };

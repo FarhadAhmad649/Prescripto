@@ -1,1 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
+
 @import "tailwindcss";
+
+*{
+  font-family: Outfit;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE & Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
