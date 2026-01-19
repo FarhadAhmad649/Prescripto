@@ -68,12 +68,13 @@ const addDoctor = async (req, res) => {
     // Adding a new doctor to the doctors database
     const newDoctor = new doctorModel(doctorData);
     const saved = await newDoctor.save();
-    console.log(
-      "adminController: doctor saved",
-      saved._id,
-      "db:",
-      mongoose.connection.name
-    );
+
+    // console.log(
+    //   "adminController: doctor saved",
+    //   saved._id,
+    //   "db:",
+    //   mongoose.connection.name
+    // );
 
     res.json({ success: true, message: "Doctor added" });
   } catch (error) {

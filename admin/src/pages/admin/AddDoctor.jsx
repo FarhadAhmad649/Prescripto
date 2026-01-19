@@ -66,6 +66,7 @@ function AddDoctor() {
         JSON.stringify({ line1: address1, line2: address2 })
       );
 
+      // console log formData
       formData.forEach((value, key) => {
         console.log(`${key} : ${value}`);
       });
@@ -252,7 +253,7 @@ function AddDoctor() {
           </div>
 
           <div className="p-3">
-            <label htmlFor="about">About me</label>
+            <label htmlFor="about">About</label>
             <textarea
               className="w-full border-[0.5px] border-gray-300 px-2 py-1 rounded-sm my-2"
               onChange={(e) => setAbout(e.target.value)}

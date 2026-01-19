@@ -8,7 +8,7 @@ function Sidebar() {
     const {aToken} = useContext(AdminContext)
 
   return (
-    <div className="min-h-screen bg-white border-r-2 border-gray-100">
+    <div className="min-h-screen min-w-14 bg-white border-r-2 border-gray-100">
       {aToken && (
         <ul className="pt-5 text-sm">
           <NavLink
