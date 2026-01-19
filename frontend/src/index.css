@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
+
+@import "tailwindcss";
+
+*{
+  font-family: Outfit;
+}
+
+.active hr{
+    @apply block;
+}
+
+::-webkit-scrollbar{
+  @apply hidden
+}
+
+/* hide scrollbar but keep scrolling */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;  /* Edge */
+}
+
+@media (max-width:740px) {
+  .active p{ 
+    @apply text-white bg-[#5f6fff]
+  }
+}
