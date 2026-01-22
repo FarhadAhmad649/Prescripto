@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const Login = () => {
+
+  const {backendUrl, token, setToken} = useContext(AppContext)
 
   const [state, setState] = useState('Sign Up')
   const [email, setEmail] = useState("");
@@ -10,10 +17,49 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", { email, password });
+
+    try {
+      // Logic for registration
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/user/register", {
+          name,
+          password,
+          email,
+        });
+
+        if (data.success) {
+          localStorage.setItem("token", data.token);
+          setToken(data.token);
+        } else {
+          toast.error(data.message);
+        }
+        // Logic for login
+      } else {
+        const { data } = await axios.post(backendUrl + "/api/user/login", {
+          password,
+          email,
+        });
+
+        if (data.success) {
+          localStorage.setItem("token", data.token);
+          setToken(data.token);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+    
   };
+
+  useEffect(()=>{
+    if(token){
+      navigate('/')
+    }
+  },[token])
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center  px-4">
@@ -75,7 +121,9 @@ const Login = () => {
           type="submit"
           className="w-full bg-[#5f6FFF] text-white py-2.5 rounded-md font-medium mt-2 hover:bg-[#4e5ce6] transition-colors"
         >
-          Login
+          {
+            state === 'Sign Up' ?"Sign Up" :"Login"
+          }
         </button>
 
         {/* Footer Link */}
