@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { doctors } from '../assets/assets'
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 function Doctors() {
+  const navigate = useNavigate();
+  const { speciality } = useParams();
+  const { doctors } = useContext(AppContext);
+  const [filterDoc, setFilterDoc] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
 
-    const navigate = useNavigate()
-    const {speciality} = useParams()
-    const [filterDoc, setFilterDoc] = useState([])
-    const [showFilter, setShowFilter] = useState(false);
-
-    const applyFilter = () =>{
-        if(speciality){
-            setFilterDoc(doctors.filter(doc => doc.speciality === speciality))
-        }else{
-            setFilterDoc(doctors)
-        }
+  const applyFilter = () => {
+    if (speciality) {
+      setFilterDoc(doctors.filter((doc) => doc.speciality === speciality));
+    } else {
+      setFilterDoc(doctors);
     }
+  };
 
-    useEffect(()=>{
-        applyFilter()
-    }, [doctors, speciality])
+  useEffect(() => {
+    applyFilter();
+  }, [doctors, speciality]);
 
   return (
     <div className="flex flex-col gap-5 px-6 md:px-10 lg:px-20 py-10">
@@ -33,7 +33,9 @@ function Doctors() {
         >
           Filters
         </button>
-        <div className={`flex flex-col gap-4 text-sm text-gray-600 w-full sm:w-auto ${showFilter ? 'flex': 'hidden sm:flex'}`}>
+        <div
+          className={`flex flex-col gap-4 text-sm text-gray-600 w-full sm:w-auto ${showFilter ? "flex" : "hidden sm:flex"}`}
+        >
           <p
             onClick={() =>
               speciality === "General physician"
@@ -153,4 +155,4 @@ function Doctors() {
   );
 }
 
-export default Doctors
+export default Doctors;

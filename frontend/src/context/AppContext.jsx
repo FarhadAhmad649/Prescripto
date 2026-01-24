@@ -33,7 +33,7 @@ const AppContextProvider = (props) => {
       if(data.success){
         setUserData(data.userData)
       }else{
-        toast.error(error.message)
+        toast.error(data.message)
       }
 
     } catch (error) {
@@ -49,7 +49,8 @@ const AppContextProvider = (props) => {
     token, setToken,
     backendUrl,
     loadUserProfileData,
-    userData, setUserData
+    userData, setUserData,
+    getDoctorsData
   };
 
   useEffect(() => {
