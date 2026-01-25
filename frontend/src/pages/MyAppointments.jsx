@@ -1,141 +1,94 @@
-import React from 'react'
-import { assets } from '../assets/assets.js';
+import React, { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../context/AppContext.jsx';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function MyAppointments() {
+
+  const {backendUrl, token} = useContext(AppContext)
+  const [appointments, setAppointments] = useState([])
+
+
+  //  Design the Data to "23 Feb 2025" format
+  const months = ["Jan","Feb","Mar","Apr","Jun","Jul","Aug","Sep", "Oct","Nov","Dec"];
+
+  const slotDateFormat = (slotDate)=>{
+    const dateArray = slotDate.split('_')
+    return dateArray[0]+ " " + months[Number(dateArray[1])-1] + " " + dateArray[2]
+  }
+
+  // API to get our appointments table
+  const getUserAppointments = async()=>{
+    try {
+
+      const {data} = await axios.get(backendUrl + '/api/user/appointments', {headers:{token}})
+
+      if(data.success){
+        setAppointments(data.appointments.reverse())
+        console.log(data.appointments)
+      }
+      
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
+  useEffect(()=>{
+    if(token){
+      getUserAppointments()
+    }
+  }, [token])
+
   return (
     <div className="p-4 sm:p-8 max-w-5xl mx-auto">
       <h2 className="text-xl font-medium text-zinc-700 pb-3 border-b border-zinc-200 mb-4">
         My Appointments
       </h2>
+      {appointments.map((item, index) => (
+        <div key={index} className="flex flex-col gap-4">
+          <div className="grid grid-cols-[1fr] md:grid-cols-[120px_1fr_max-content] gap-4 md:gap-6 py-4 border-b border-zinc-200 items-end md:items-center">
+            {/* Doctor Image */}
+            <div className="bg-indigo-50 rounded-md overflow-hidden">
+              <img
+                src={item.docData.image}
+                alt="doctor"
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-[1fr] md:grid-cols-[120px_1fr_max-content] gap-4 md:gap-6 py-4 border-b border-zinc-200 items-end md:items-center">
-          {/* Doctor Image */}
-          <div className="bg-indigo-50 rounded-md overflow-hidden">
-            <img
-              src={assets.appointment_img}
-              alt="doctor"
-              className="w-full h-full object-cover"
-            />
-          </div>
+            {/* Doctor Info */}
+            <div className="flex-1 text-sm text-zinc-600">
+              <p className="text-neutral-800 font-semibold text-lg">
+                {item.docData.name}
+              </p>
+              <p className="mb-2">{item.docData.speciality}</p>
+              <p className="text-zinc-700 font-medium mt-1">Address:</p>
+              <p className="text-xs">{item.docData.address.line1}</p>
+              <p className="text-xs">{item.docData.address.line2}</p>
+              <p className="text-xs mt-2">
+                <span className="text-zinc-700 font-medium">Date & Time:</span>{" "}
+                {slotDateFormat(item.slotDate)} | {item.slotTime}
+              </p>
+            </div>
 
-          {/* Doctor Info */}
-          <div className="flex-1 text-sm text-zinc-600">
-            <p className="text-neutral-800 font-semibold text-lg">
-              Dr.Richard James
-            </p>
-            <p className="mb-2">General physician</p>
-            <p className="text-zinc-700 font-medium mt-1">Address:</p>
-            <p className="text-xs">57th Cross, Richmond</p>
-            <p className="text-xs">Circle, Church Road, London</p>
-            <p className="text-xs mt-2">
-              <span className="text-zinc-700 font-medium">Date & Time:</span>{" "}
-              25,july,2026 | 8.30PM
-            </p>
-          </div>
+            {/* Actions */}
+            <div className="flex flex-col gap-2 justify-end min-w-[150px]">
+              <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white">
+                Pay here
+              </button>
 
-          {/* Actions */}
-          <div className="flex flex-col gap-2 justify-end min-w-[150px]">
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white">
-              Pay here
-            </button>
+              <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50 border-none">
+                Paid
+              </button>
 
-            <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50 border-none">
-              Paid
-            </button>
-
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300">
-              Cancel appointment
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-[1fr] md:grid-cols-[120px_1fr_max-content] gap-4 md:gap-6 py-4 border-b border-zinc-200 items-end md:items-center">
-          {/* Doctor Image */}
-          <div className="bg-indigo-50 rounded-md overflow-hidden">
-            <img
-              src={assets.appointment_img}
-              alt="doctor"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Doctor Info */}
-          <div className="flex-1 text-sm text-zinc-600">
-            <p className="text-neutral-800 font-semibold text-lg">
-              Dr.Richard James
-            </p>
-            <p className="mb-2">General physician</p>
-            <p className="text-zinc-700 font-medium mt-1">Address:</p>
-            <p className="text-xs">57th Cross, Richmond</p>
-            <p className="text-xs">Circle, Church Road, London</p>
-            <p className="text-xs mt-2">
-              <span className="text-zinc-700 font-medium">Date & Time:</span>{" "}
-              25,july,2026 | 8.30PM
-            </p>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-col gap-2 justify-end min-w-[150px]">
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white">
-              Pay here
-            </button>
-
-            <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50 border-none">
-              Paid
-            </button>
-
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300">
-              Cancel appointment
-            </button>
+              <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300">
+                Cancel appointment
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-[1fr] md:grid-cols-[120px_1fr_max-content] gap-4 md:gap-6 py-4 border-b border-zinc-200 items-end md:items-center">
-          {/* Doctor Image */}
-          <div className="bg-indigo-50 rounded-md overflow-hidden">
-            <img
-              src={assets.appointment_img}
-              alt="doctor"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* Doctor Info */}
-          <div className="flex-1 text-sm text-zinc-600">
-            <p className="text-neutral-800 font-semibold text-lg">
-              Dr.Richard James
-            </p>
-            <p className="mb-2">General physician</p>
-            <p className="text-zinc-700 font-medium mt-1">Address:</p>
-            <p className="text-xs">57th Cross, Richmond</p>
-            <p className="text-xs">Circle, Church Road, London</p>
-            <p className="text-xs mt-2">
-              <span className="text-zinc-700 font-medium">Date & Time:</span>{" "}
-              25,july,2026 | 8.30PM
-            </p>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-col gap-2 justify-end min-w-[150px]">
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white">
-              Pay here
-            </button>
-
-            <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50 border-none">
-              Paid
-            </button>
-
-            <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300">
-              Cancel appointment
-            </button>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
