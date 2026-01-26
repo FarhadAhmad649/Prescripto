@@ -8,6 +8,8 @@ function MyAppointments() {
   const {backendUrl, token, getDoctorsData} = useContext(AppContext)
   const [appointments, setAppointments] = useState([])
 
+  const [pay, setPay] = useState(false)
+
 
   //  Design the Data to "23 Feb 2025" format
   const months = ["Jan","Feb","Mar","Apr","Jun","Jul","Aug","Sep", "Oct","Nov","Dec"];
@@ -53,6 +55,10 @@ function MyAppointments() {
     }
   }
 
+  const payFees = ()=>{
+
+  }
+
   useEffect(()=>{
     if(token){
       getUserAppointments()
@@ -93,16 +99,16 @@ function MyAppointments() {
 
             {/* Actions */}
             <div className="flex flex-col gap-2 justify-end  min-w-[150px]">
-              {!item.cancelled && (
-                <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white ">
+              {!item.cancelled && !pay && (
+                <button onClick={()=> setPay(true)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white ">
                   Pay Online
                 </button>
               )}
 
-              {/* <button className="sm:min-w-48 py-2 border rounded text-stone-500 bg-indigo-50 border-none">
+              {!item.cancelled && pay && <button className="sm:min-w-48 py-2 border rounded text-blue-500 bg-indigo-50 border-none">
                 Paid
-              </button> */}
-              {!item.cancelled && (
+              </button> }
+              {!item.cancelled && !pay && (
                 <button
                   onClick={() => cancelAppointment(item._id)}
                   className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300"
@@ -111,7 +117,7 @@ function MyAppointments() {
                 </button>
               )}
               {item.cancelled && (
-                <button className="text-sm text-center text-red-500 sm:min-w-48 py-2 border border-black rounded bg-gray-200 ">
+                <button className="text-sm text-center text-red-500 sm:min-w-48 py-2 rounded bg-gray-200 ">
                   Cancelled
                 </button>
               )}

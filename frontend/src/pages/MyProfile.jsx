@@ -10,7 +10,7 @@ const MyProfile = () => {
   const {userData, setUserData, token, backendUrl, loadUserProfileData} = useContext(AppContext)
   const [image, setImage] = useState(false)
 
-  // Removed this when we i ntegrate api for "get-profile"
+  // Removed this when we integrate api for "get-profile"
   /* 
   const [userData, setUserData] = useState({
     name: "Edward Vincent",

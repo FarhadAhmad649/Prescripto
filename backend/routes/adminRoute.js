@@ -4,6 +4,8 @@
    loginAdmin,
    getDoctors,
    alldoctors,
+   appointmentsAdmin,
+   appointmentCancel
  } from "../controllers/adminController.js";
  import upload from "../middlewares/multer.js";
  import authAdmin from "../middlewares/authAdmin.js";
@@ -16,5 +18,7 @@ import { changeAvailability } from "../controllers/doctorController.js";
  // debug: list all doctors (requires admin auth)
  adminRouter.post("/change-availability", authAdmin, changeAvailability);
  adminRouter.post("/all-doctors",authAdmin, alldoctors)
+ adminRouter.get('/appointments', authAdmin, appointmentsAdmin)
+ adminRouter.post('/cancel-appointment', authAdmin, appointmentCancel)
 
  export default adminRouter

@@ -8,7 +8,7 @@ function Sidebar() {
     const {aToken} = useContext(AdminContext)
 
   return (
-    <div className="min-h-screen min-w-14 bg-white border-r-2 border-gray-100">
+    <div className="min-h-screen min-w-14 md:min-w-72 bg-white border-r-2 border-gray-100">
       {aToken && (
         <ul className="pt-5 text-sm">
           <NavLink
@@ -36,7 +36,7 @@ function Sidebar() {
             to={"/all-appointments"}
           >
             <img src={assets.appointment_icon} alt="appointments" />
-            <p className="hidden md:flex">Appointment</p>
+            <p className="hidden md:flex">Appointments</p>
           </NavLink>
 
           <NavLink

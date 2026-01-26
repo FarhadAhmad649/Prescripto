@@ -31,6 +31,7 @@ const AppContextProvider = (props) => {
       const {data} = await axios.get(backendUrl + '/api/user/get-profile', {headers: {token}})
 
       if(data.success){
+        console.log('dob in the frontend: '+data.userData.dob)
         setUserData(data.userData)
       }else{
         toast.error(data.message)
@@ -49,8 +50,7 @@ const AppContextProvider = (props) => {
     token, setToken,
     backendUrl,
     loadUserProfileData,
-    userData, setUserData,
-    getDoctorsData
+    userData, setUserData
   };
 
   useEffect(() => {
