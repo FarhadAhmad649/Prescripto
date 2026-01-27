@@ -5,7 +5,8 @@
    getDoctors,
    alldoctors,
    appointmentsAdmin,
-   appointmentCancel
+   appointmentCancel,
+   adminDashboard
  } from "../controllers/adminController.js";
  import upload from "../middlewares/multer.js";
  import authAdmin from "../middlewares/authAdmin.js";
@@ -20,5 +21,6 @@ import { changeAvailability } from "../controllers/doctorController.js";
  adminRouter.post("/all-doctors",authAdmin, alldoctors)
  adminRouter.get('/appointments', authAdmin, appointmentsAdmin)
  adminRouter.post('/cancel-appointment', authAdmin, appointmentCancel)
+ adminRouter.get('/dashboard',authAdmin, adminDashboard)
 
  export default adminRouter
