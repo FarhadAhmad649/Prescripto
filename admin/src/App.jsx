@@ -9,11 +9,16 @@ import Dashboard from "./pages/admin/Dashboard";
 import AllAppointments from "./pages/admin/AllAppointments";
 import AddDoctor from "./pages/admin/AddDoctor";
 import DoctorsList from "./pages/admin/DoctorsList";
+import { DoctorContext } from "./context/DoctorContext";
+import DoctorDashboard from "./pages/doctor/doctorDashboard";
+import DoctorProfile from "./pages/doctor/doctorProfile";
+import DoctorAppointments from "./pages/doctor/doctorAppointments";
 
 function App() {
   const { aToken } = useContext(AdminContext);
+  const {dToken} = useContext(DoctorContext)
 
-  return aToken ? (
+  return aToken || dToken ? (
     <div className="bg-[#f8f9fd]">
       <ToastContainer position={"top-right"} style={{ zIndex: 9999 }} />
       <Navbar />
@@ -21,11 +26,17 @@ function App() {
       <div className="flex items-start">
         <Sidebar />
         <Routes>
+          {/* Admin Routes */}
           <Route path="/" element={<></>} />
           <Route path="/admin-dashboard" element={<Dashboard />} />
           <Route path="/all-appointments" element={<AllAppointments />} />
           <Route path="/add-doctor" element={<AddDoctor />} />
           <Route path="/doctors-list" element={<DoctorsList />} />
+
+          {/* Doctor Routes */}
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctor-appointments" element={<DoctorAppointments />} />
+          <Route path="/doctor-profile" element={<DoctorProfile />} />
         </Routes>
       </div>
     </div>

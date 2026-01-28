@@ -2,13 +2,15 @@ import React, { useContext } from 'react'
 import { AdminContext } from '../context/AdminContext'
 import { assets } from '../assets/assets'
 import { NavLink } from 'react-router-dom'
+import { DoctorContext } from '../context/DoctorContext'
 
 function Sidebar() {
 
     const {aToken} = useContext(AdminContext)
+    const {dToken} = useContext(DoctorContext)
 
   return (
-    <div className="min-h-screen min-w-14 md:min-w-72 bg-white border-r-2 border-gray-100">
+    <div className="min-h-screen min-w-14 lg:min-w-72 bg-white border-r-2 border-gray-100">
       {aToken && (
         <ul className="pt-5 text-sm">
           <NavLink
@@ -63,8 +65,54 @@ function Sidebar() {
             }
             to={"/doctors-list"}
           >
-            <img  src={assets.people_icon} alt="list" />
+            <img src={assets.people_icon} alt="list" />
             <p className="hidden md:flex">Doctor List</p>
+          </NavLink>
+        </ul>
+      )}
+
+      {dToken && (
+        <ul className="pt-5 text-sm">
+          <NavLink
+            className={({ isActive }) =>
+              `flex gap-3 my-2 px-3 py-2 md:px-9 md:min-w-72 items-center ${
+                isActive
+                  ? "bg-[#f2f3ff] cursor-pointer border-r-4 border-[#5f6fff]"
+                  : ""
+              }`
+            }
+            to={"/doctor-dashboard"}
+          >
+            <img className="w-6" src={assets.home_icon} alt="home" />
+            <p className="hidden md:flex">Dashboard</p>
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              `flex gap-2 my-2 px-3 py-2 md:px-9 md:min-w-72 items-center ${
+                isActive
+                  ? "bg-[#f2f3ff] cursor-pointer border-r-4 border-[#5f6fff]"
+                  : ""
+              }`
+            }
+            to={"/doctor-appointments"}
+          >
+            <img src={assets.appointment_icon} alt="appointments" />
+            <p className="hidden md:flex">Appointments</p>
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              `flex gap-3 my-2 py-2 px-3 md:px-9 md:min-w-72 items-center ${
+                isActive
+                  ? "bg-[#f2f3ff] cursor-pointer border-r-4 border-[#5f6fff]"
+                  : ""
+              }`
+            }
+            to={"/doctor-profile"}
+          >
+            <img src={assets.people_icon} alt="list" />
+            <p className="hidden md:flex">Profile</p>
           </NavLink>
         </ul>
       )}
