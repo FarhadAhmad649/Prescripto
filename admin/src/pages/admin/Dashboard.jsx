@@ -54,6 +54,13 @@ function Dashboard() {
           </div>
 
           <div className="pt-4 border border-t-0">
+            {dashData.latestAppointments.length === 0 ? (
+              <div className="flex justify-center my-5 text-gray-600 ">
+                <p>OOPS! No Appointments Yet</p>
+              </div>
+            ) : (
+              ""
+            )}
             {dashData.latestAppointments.map((item, index) => (
               <div
                 className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100"
@@ -73,15 +80,23 @@ function Dashboard() {
                   </p>
                 </div>
 
-                {item.cancelled ? (
+                {item.cancelled && (
                   <p className="text-red-400 text-xs font-medium">Cancelled</p>
-                ) : (
+                )}
+
+                {!item.cancelled && !item.isCompleted && (
                   <img
                     onClick={() => cancelAppointment(item._id)}
                     src={assets.cancel_icon}
                     className="w-10 cursor-pointer hover:scale-125 transition-all duration-300 "
                     alt=""
                   />
+                )}
+
+                {!item.cancelled && item.isCompleted && (
+                  <p className="text-green-400 text-xs font-medium">
+                    Completed
+                  </p>
                 )}
               </div>
             ))}

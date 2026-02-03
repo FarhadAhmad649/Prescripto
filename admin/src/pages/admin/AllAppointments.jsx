@@ -30,6 +30,13 @@ function AllAppointments() {
           <p>Actions</p>
         </div>
 
+        {appointments.length === 0 ? (
+          <div className="flex justify-center mt-10 text-gray-600 ">
+            <p>OOPS! No Appointments Yet</p>
+          </div>
+        ) : (
+          ""
+        )}
         {appointments.map((item, index) => (
           <div
             className="flex flex-wrap justify-between max-sm:gap-2 sm:grid sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_1fr] items-center text-gray-500 py-3 px-6 border-b hover:bg-gray-50"
@@ -45,7 +52,11 @@ function AllAppointments() {
               />
               <p>{item.userData.name}</p>
             </div>
-            <p className="max-sm:hidden">{item.userData?.dob && item.userData.dob !== "Not Selected" ? calculateAge(item.userData.dob) : "N/A"}</p>
+            <p className="max-sm:hidden">
+              {item.userData?.dob && item.userData.dob !== "Not Selected"
+                ? calculateAge(item.userData.dob)
+                : "N/A"}
+            </p>
             <p>
               {slotDateFormat(item.slotDate)}, {item.slotTime}
             </p>
@@ -62,10 +73,10 @@ function AllAppointments() {
               {item.amount}
             </p>
             {item.cancelled ? (
-              <p className='text-red-400 text-xs font-medium'>Cancelled</p>
+              <p className="text-red-400 text-xs font-medium">Cancelled</p>
             ) : (
               <img
-                onClick={()=> cancelAppointment(item._id)}
+                onClick={() => cancelAppointment(item._id)}
                 src={assets.cancel_icon}
                 className="w-10 cursor-pointer hover:scale-125 transition-all duration-300 "
                 alt=""

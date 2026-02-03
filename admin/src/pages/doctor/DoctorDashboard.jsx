@@ -25,7 +25,8 @@ const doctorDashboard = () => {
               <img className="w-14" src={assets.earning_icon} alt="" />
             </div>
             <p className="text-xl font-semibold text-gray-600">
-              {currency}{dashData.earnings}
+              {currency}
+              {dashData.earnings}
             </p>
             <p className="text-gray-400">Earnings</p>
           </div>
@@ -80,17 +81,25 @@ const doctorDashboard = () => {
                     </p>
                   </div>
 
-                  {item.cancelled ? (
+                  {item.cancelled && (
                     <p className="text-red-400 text-xs font-medium">
                       Cancelled
                     </p>
-                  ) : (
+                  )}
+
+                  {!item.cancelled && !item.isCompleted && (
                     <img
                       onClick={() => cancelAppointment(item._id)}
                       src={assets.cancel_icon}
                       className="w-10 cursor-pointer hover:scale-125 transition-all duration-300 "
                       alt=""
                     />
+                  )}
+
+                  {!item.cancelled && item.isCompleted && (
+                    <p className="text-green-400 text-xs font-medium">
+                      Completed
+                    </p>
                   )}
                 </div>
               ))}

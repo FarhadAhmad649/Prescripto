@@ -8,70 +8,85 @@ function MyAppointments() {
   const {backendUrl, token, getDoctorsData} = useContext(AppContext)
   const [appointments, setAppointments] = useState([])
 
-  const [pay, setPay] = useState(false)
-
+  const [paidId, setPaidId] = useState(null);
 
   //  Design the Data to "23 Feb 2025" format
-  const months = ["Jan","Feb","Mar","Apr","Jun","Jul","Aug","Sep", "Oct","Nov","Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
-  const slotDateFormat = (slotDate)=>{
-    const dateArray = slotDate.split('_')
-    return dateArray[0]+ " " + months[Number(dateArray[1])-1] + " " + dateArray[2]
-  }
+  const slotDateFormat = (slotDate) => {
+    const dateArray = slotDate.split("_");
+    return (
+      dateArray[0] + " " + months[Number(dateArray[1]) - 1] + " " + dateArray[2]
+    );
+  };
 
   // API to get our appointments table
-  const getUserAppointments = async()=>{
+  const getUserAppointments = async () => {
     try {
+      const { data } = await axios.get(backendUrl + "/api/user/appointments", {
+        headers: { token },
+      });
 
-      const {data} = await axios.get(backendUrl + '/api/user/appointments', {headers:{token}})
-
-      if(data.success){
-        setAppointments(data.appointments.reverse())
-        console.log(data.appointments)
+      if (data.success) {
+        setAppointments(data.appointments.reverse());
+        console.log(data.appointments);
       }
-      
-    } catch (error) {
-      console.log(error)
-      toast.error(error.message)
-    }
-  }
-
-  const cancelAppointment = async (appointmentId)=>{
-    try {
-
-      const {data} = await axios.post(backendUrl + '/api/user/cancel-appointment',{appointmentId}, {headers:{token}})
-
-      if(data.success){
-        toast.success(data.message)
-        getUserAppointments()
-        getDoctorsData()
-      }else{
-        toast.error(data.message)
-      }
-      
     } catch (error) {
       console.log(error);
       toast.error(error.message);
     }
-  }
+  };
 
-  const payFees = ()=>{
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/user/cancel-appointment",
+        { appointmentId },
+        { headers: { token } },
+      );
 
-  }
-
-  useEffect(()=>{
-    if(token){
-      getUserAppointments()
+      if (data.success) {
+        toast.success(data.message);
+        getUserAppointments();
+        getDoctorsData();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
     }
-  }, [token])
+  };
+
+  useEffect(() => {
+    if (token) {
+      getUserAppointments();
+    }
+  }, [token]);
 
   return (
     <div className="p-4 sm:p-8 max-w-5xl mx-auto">
       <h2 className="text-xl font-medium text-zinc-700 pb-3 border-b border-zinc-200 mb-4">
         My Appointments
       </h2>
-      {appointments.map((item, index) => (
-        <div key={index} className="flex flex-col gap-4">
+      {
+        appointments.length === 0 ? <div className='flex justify-center mt-10 text-gray-600 '><p>OOPS! You Have No Appointments Yet</p></div> : ""
+      }
+      {appointments.map((item) => (
+        <div key={item._id} className="flex flex-col gap-4">
           <div className="grid grid-cols-[1fr] md:grid-cols-[120px_1fr_max-content] gap-4 md:gap-6 py-4 border-b border-zinc-200 items-end md:items-center">
             {/* Doctor Image */}
             <div className="bg-indigo-50 rounded-md overflow-hidden">
@@ -99,16 +114,21 @@ function MyAppointments() {
 
             {/* Actions */}
             <div className="flex flex-col gap-2 justify-end  min-w-[150px]">
-              {!item.cancelled && !pay && (
-                <button onClick={()=> setPay(true)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white ">
+              {!item.cancelled && paidId !== item._id && !item.isCompleted && (
+                <button
+                  onClick={() => setPaidId(item._id)}
+                  className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-[#5f6FFF] hover:text-white transition-all duration-300 bg-[#5f6FFF] text-white "
+                >
                   Pay Online
                 </button>
               )}
 
-              {!item.cancelled && pay && <button className="sm:min-w-48 py-2 border rounded text-blue-500 bg-indigo-50 border-none">
-                Paid
-              </button> }
-              {!item.cancelled && !pay && (
+              {!item.cancelled && paidId === item._id && !item.isCompleted && (
+                <button className="sm:min-w-48 py-2 border rounded text-blue-500 bg-indigo-50 border-none">
+                  Paid
+                </button>
+              )}
+              {!item.cancelled && !item.isCompleted && (
                 <button
                   onClick={() => cancelAppointment(item._id)}
                   className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-red-600 hover:text-white transition-all duration-300"
@@ -116,9 +136,14 @@ function MyAppointments() {
                   Cancel appointment
                 </button>
               )}
-              {item.cancelled && (
-                <button className="text-sm text-center text-red-500 sm:min-w-48 py-2 rounded bg-gray-200 ">
+              {item.cancelled && !item.isCompleted && (
+                <button className="text-sm text-center text-red-500 border border-red-300 sm:min-w-48 py-2 rounded bg-gray-200 ">
                   Cancelled
+                </button>
+              )}
+              {item.isCompleted && !item.cancelled && (
+                <button className="text-sm text-center text-green-500 sm:min-w-48 py-2 border border-green-300 rounded bg-gray-200 ">
+                  Completed
                 </button>
               )}
             </div>

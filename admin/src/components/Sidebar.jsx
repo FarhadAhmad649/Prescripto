@@ -84,7 +84,7 @@ function Sidebar() {
             to={"/doctor-dashboard"}
           >
             <img className="w-6" src={assets.home_icon} alt="home" />
-            <p className="hidden md:flex">Dashboard</p>
+            <p className="hidden lg:flex">Dashboard</p>
           </NavLink>
 
           <NavLink
@@ -98,7 +98,7 @@ function Sidebar() {
             to={"/doctor-appointments"}
           >
             <img src={assets.appointment_icon} alt="appointments" />
-            <p className="hidden md:flex">Appointments</p>
+            <p className="hidden lg:flex">Appointments</p>
           </NavLink>
 
           <NavLink
@@ -112,7 +112,7 @@ function Sidebar() {
             to={"/doctor-profile"}
           >
             <img src={assets.people_icon} alt="list" />
-            <p className="hidden md:flex">Profile</p>
+            <p className="hidden lg:flex">Profile</p>
           </NavLink>
         </ul>
       )}
