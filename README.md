@@ -1,6 +1,8 @@
 # 🩺 Prescripto - Doctor Appointment & Healthcare Management Platform
 
-![Prescripto Banner](./screenshots/banner.png)
+![Prescripto Banner](<img width="734" height="596" alt="header_img" src="https://github.com/user-attachments/assets/ab054ffd-b44d-4664-a421-1b57c8440371" />
+
+)
 
 Prescripto is a full-stack healthcare management platform built to simplify the process of connecting patients with doctors through a modern digital appointment system.
 
@@ -126,24 +128,6 @@ Prescripto implements secure authentication and authorization using:
 - Secure environment variable management
 - Backend validation middleware
 
-
----
-
-# 📸 Screenshots
-
-Add your screenshots inside the `screenshots` folder.
-
-Example:
-
-```
-screenshots/
-│
-├── banner.png
-├── home.png
-├── doctor-dashboard.png
-├── admin-dashboard.png
-└── appointment.png
-```
 
 ---
 
