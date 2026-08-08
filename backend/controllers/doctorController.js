@@ -54,6 +54,7 @@ const loginDoctor = async (req, res) => {
   }
 };
 
+
 // API to get doctor Appointments for doctor panel
 const appointmentsDoctor = async (req, res) => {
   try {

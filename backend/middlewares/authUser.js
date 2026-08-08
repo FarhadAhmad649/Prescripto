@@ -3,23 +3,34 @@ import jwt from "jsonwebtoken";
 // user authentication middleware
 const authUser = (req, res, next) => {
   try {
-    const { token } = req.headers;
+    let token =
+      req.headers.token ||
+      req.headers["x-access-token"] ||
+      req.headers.authorization ||
+      req.headers.Authorization;
+
     if (!token) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "Not authorized, login again",
       });
     }
 
-    const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+    if (typeof token === "string" && token.startsWith("Bearer ")) {
+      token = token.split(" ")[1];
+    }
+
+    const token_decode = jwt.verify(token.trim(), process.env.JWT_SECRET);
 
     req.userId = token_decode.id;
 
-    // authorized
     next();
   } catch (error) {
     console.log("authUser error:", error);
-    return res.json({ success: false, message: "Not authorized, login again" });
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized, login again",
+    });
   }
 };
 

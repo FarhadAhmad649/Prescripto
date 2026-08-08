@@ -6,14 +6,20 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const currencySymbol = "$";
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:4800";
   const [doctors, setDoctors] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem('token')? localStorage.getItem('token'):false)
-  const [userData, setUserData] = useState(false)
+  const [token, setToken] = useState(
+    localStorage.getItem("token") ? localStorage.getItem("token") : false,
+  );
+  const [userData, setUserData] = useState(false);
+
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
   const getDoctorsData = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/doctor/list");
+      const url = `${backendUrl}/api/doctor/list`;
+      const { data } = await axios.get(url);
       if (data.success) {
         setDoctors(data.doctors);
       } else {
@@ -25,23 +31,23 @@ const AppContextProvider = (props) => {
     }
   };
 
-  const loadUserProfileData = async ()=>{
+  const loadUserProfileData = async () => {
     try {
-      
-      const {data} = await axios.get(backendUrl + '/api/user/get-profile', {headers: {token}})
+      const { data } = await axios.get(backendUrl + "/api/user/get-profile", {
+        headers: authHeaders,
+      });
 
-      if(data.success){
-        console.log('dob in the frontend: '+data.userData.dob)
-        setUserData(data.userData)
-      }else{
-        toast.error(data.message)
+      if (data.success) {
+        console.log("dob in the frontend: " + data.userData.dob);
+        setUserData(data.userData);
+      } else {
+        toast.error(data.message);
       }
-
     } catch (error) {
       toast.error(error.message);
       console.log(error);
     }
-  }
+  };
 
   const value = {
     doctors,
